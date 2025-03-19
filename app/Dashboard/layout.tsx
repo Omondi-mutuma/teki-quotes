@@ -24,6 +24,7 @@ export default async function Layout({
         <SidebarInset>
           <div className="flex justify-between items-center p-4">
             <SidebarTrigger />
+            <header>dfdf</header>
             <ThemeSwitcher />
           </div>
           {children}

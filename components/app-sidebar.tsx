@@ -48,9 +48,30 @@ const NAV_DATA = {
       icon: Home,
     },
     {
-      title: "Invoices",
+      title: "Quotations",
       url: "#",
       icon: Inbox,
+      isActive: true,
+      items: [
+        {
+          title: "All",
+          url: "#",
+        },
+        {
+          title: "Approved",
+          url: "#",
+        },
+        {
+          title: "Cancelled",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Invoices",
+      url: "#",
+      icon: Calendar,
+      isActive: false,
       items: [
         {
           title: "All",
@@ -64,17 +85,26 @@ const NAV_DATA = {
           title: "Unpaid",
           url: "#",
         },
-      ],
+      ]
     },
     {
-      title: "Calendar",
-      url: "#",
-      icon: Calendar,
-    },
-    {
-      title: "Search",
+      title: "Shopping Lists",
       url: "#",
       icon: Search,
+      items: [
+        {
+          title: "All",
+          url: "#",
+        },
+        {
+          title: "Completed",
+          url: "#",
+        },
+        {
+          title: "Pending",
+          url: "#",
+        },
+      ]
     },
     {
       title: "Settings",
@@ -126,7 +156,7 @@ export const AppSidebar = () => {
                         <SidebarMenuSub>
                           {item.items.map((subitem) => (
                             <SidebarMenuSubItem key={subitem.title}>
-                              <SidebarMenuSubButton asChild>
+                              <SidebarMenuSubButton asChild isActive={item.isActive}>
                                 <Link href={subitem.url}>
                                   {/* <Quote /> */}
                                   <span>{subitem.title}</span>
