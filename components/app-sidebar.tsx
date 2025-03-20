@@ -51,11 +51,11 @@ const NAV_DATA = {
       title: "Quotations",
       url: "#",
       icon: Inbox,
-      isActive: true,
       items: [
         {
           title: "All",
           url: "#",
+          isActive: true,
         },
         {
           title: "Approved",
@@ -85,7 +85,7 @@ const NAV_DATA = {
           title: "Unpaid",
           url: "#",
         },
-      ]
+      ],
     },
     {
       title: "Shopping Lists",
@@ -104,7 +104,7 @@ const NAV_DATA = {
           title: "Pending",
           url: "#",
         },
-      ]
+      ],
     },
     {
       title: "Settings",
@@ -135,42 +135,48 @@ export const AppSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               {NAV_DATA.NAV_MAIN.map((item) => (
-                <Collapsible
-                  key={item.title}
-                  defaultOpen
-                  className="group/collapsible"
-                >
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton>
-                        <item.icon />
-                        <span>{item.title}</span>
-                        {/* Icons with styling depending on sidebar state */}
-                        <ChevronDown className="ml-auto hidden group-data-[state=closed]/collapsible:block" />
-                        <ChevronUp className="ml-auto hidden group-data-[state=open]/collapsible:block" />
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
+                <div>
+                  
+                  <Collapsible
+                    key={item.title}
+                    defaultOpen
+                    className="group/collapsible"
+                  >
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton>
+                          <item.icon />
+                          <span>{item.title}</span>
+                          {/* Icons with styling depending on sidebar state */}
+                          <ChevronDown className="ml-auto hidden group-data-[state=closed]/collapsible:block" />
+                          <ChevronUp className="ml-auto hidden group-data-[state=open]/collapsible:block" />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
 
-                    {item.items?.length ? (
-                      <CollapsibleContent>
-                        <SidebarMenuSub>
-                          {item.items.map((subitem) => (
-                            <SidebarMenuSubItem key={subitem.title}>
-                              <SidebarMenuSubButton asChild isActive={item.isActive}>
-                                <Link href={subitem.url}>
-                                  {/* <Quote /> */}
-                                  <span>{subitem.title}</span>
-                                </Link>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                          ))}
-                        </SidebarMenuSub>
-                      </CollapsibleContent>
-                    ) : (
-                      ""
-                    )}
-                  </SidebarMenuItem>
-                </Collapsible>
+                      {item.items?.length ? (
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {item.items.map((subitem) => (
+                              <SidebarMenuSubItem key={subitem.title}>
+                                <SidebarMenuSubButton
+                                  asChild
+                                  isActive={item.isActive}
+                                >
+                                  <Link href={subitem.url}>
+                                    {/* <Quote /> */}
+                                    <span>{subitem.title}</span>
+                                  </Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      ) : (
+                        ""
+                      )}
+                    </SidebarMenuItem>
+                  </Collapsible>
+                </div>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
