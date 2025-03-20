@@ -1,13 +1,12 @@
 import {
   SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/app-sidebar";
 import { cookies } from "next/headers";
 import "../globals.css";
 import { geistMono, ubuntu } from "@/components/ui/fonts";
-import { ThemeSwitcher } from "@/components/theme-switcher";
+import { SiteHeader } from "@/components/site-header";
 
 export default async function Layout({
   children,
@@ -22,11 +21,7 @@ export default async function Layout({
       <SidebarProvider defaultOpen={defaultOpen}>
         <AppSidebar />
         <SidebarInset>
-          <div className="flex justify-between items-center p-4">
-            <SidebarTrigger />
-            <header>dfdf</header>
-            <ThemeSwitcher />
-          </div>
+          <SiteHeader />
           {children}
         </SidebarInset>
       </SidebarProvider>
