@@ -1,13 +1,7 @@
 import {
-  Calendar,
   ChevronDown,
   ChevronUp,
-  Home,
-  Inbox,
   NotebookTabsIcon,
-  Quote,
-  Search,
-  Settings,
 } from "lucide-react";
 
 import {
@@ -25,7 +19,6 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
 import {
   Collapsible,
@@ -33,86 +26,8 @@ import {
   CollapsibleTrigger,
 } from "./ui/collapsible";
 import NavUser from "./ui/nav-user";
+import { NAV_DATA } from "@/lib/navigation";
 
-// Menu items.
-const NAV_DATA = {
-  USER_DATA: {
-    name: "Brian Omondi",
-    email: "omondi@teki.dev",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  NAV_MAIN: [
-    {
-      title: "Home",
-      url: "#",
-      icon: Home,
-    },
-    {
-      title: "Quotations",
-      url: "#",
-      icon: Inbox,
-      items: [
-        {
-          title: "All",
-          url: "#",
-          isActive: true,
-        },
-        {
-          title: "Approved",
-          url: "#",
-        },
-        {
-          title: "Cancelled",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Invoices",
-      url: "#",
-      icon: Calendar,
-      isActive: false,
-      items: [
-        {
-          title: "All",
-          url: "#",
-        },
-        {
-          title: "Paid",
-          url: "#",
-        },
-        {
-          title: "Unpaid",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Shopping Lists",
-      url: "#",
-      icon: Search,
-      items: [
-        {
-          title: "All",
-          url: "#",
-        },
-        {
-          title: "Completed",
-          url: "#",
-        },
-        {
-          title: "Pending",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings,
-    },
-  ],
-};
 
 export const AppSidebar = () => {
   return (
@@ -130,57 +45,63 @@ export const AppSidebar = () => {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {NAV_DATA.NAV_MAIN.map((item) => (
-                <div>
-                  
-                  <Collapsible
-                    key={item.title}
-                    defaultOpen
-                    className="group/collapsible"
-                  >
-                    <SidebarMenuItem>
-                      <CollapsibleTrigger asChild>
-                        <SidebarMenuButton>
-                          <item.icon />
-                          <span>{item.title}</span>
-                          {/* Icons with styling depending on sidebar state */}
-                          <ChevronDown className="ml-auto hidden group-data-[state=closed]/collapsible:block" />
-                          <ChevronUp className="ml-auto hidden group-data-[state=open]/collapsible:block" />
-                        </SidebarMenuButton>
-                      </CollapsibleTrigger>
+        {NAV_DATA.NAV_GROUPS.map((navGroup) => (
+          <SidebarGroup key={navGroup.label}>
+            <SidebarGroupLabel>{navGroup.label}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {navGroup.items.map((navItem) => {
+                  const { title, url, icon: NavIcon, items: subItems } = navItem;
+                  const hasSubItems = Boolean(subItems?.length);
 
-                      {item.items?.length ? (
-                        <CollapsibleContent>
-                          <SidebarMenuSub>
-                            {item.items.map((subitem) => (
-                              <SidebarMenuSubItem key={subitem.title}>
-                                <SidebarMenuSubButton
-                                  asChild
-                                  isActive={item.isActive}
-                                >
-                                  <Link href={subitem.url}>
-                                    {/* <Quote /> */}
-                                    <span>{subitem.title}</span>
-                                  </Link>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        </CollapsibleContent>
+                  return (
+                    <div key={title}>
+                      {hasSubItems ? (
+                        <Collapsible className="group/collapsible">
+                          <SidebarMenuItem>
+                            <CollapsibleTrigger asChild>
+                              <SidebarMenuButton>
+                                <NavIcon />
+                                <span>{title}</span>
+                                <ChevronDown className="ml-auto hidden group-data-[state=closed]/collapsible:block" />
+                                <ChevronUp className="ml-auto hidden group-data-[state=open]/collapsible:block" />
+                              </SidebarMenuButton>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent>
+                              <SidebarMenuSub>
+                                {subItems.map((subItem) => (
+                                  <SidebarMenuSubItem key={subItem.title}>
+                                    <SidebarMenuSubButton
+                                      asChild
+                                      isActive={subItem.isActive}
+                                    >
+                                      <Link href={subItem.url}>
+                                        <span>{subItem.title}</span>
+                                      </Link>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                ))}
+                              </SidebarMenuSub>
+                            </CollapsibleContent>
+                          </SidebarMenuItem>
+                        </Collapsible>
                       ) : (
-                        ""
+                        <SidebarMenuItem>
+                          <SidebarMenuButton asChild>
+                            <Link href={url}>
+                              <NavIcon />
+                              <span>{title}</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
                       )}
-                    </SidebarMenuItem>
-                  </Collapsible>
-                </div>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                    </div>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={NAV_DATA.USER_DATA} />

@@ -13,17 +13,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronsUpDown, MoreHorizontal } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Payment = {
   id: string;
-  quotation: string;
   customer: string;
-  invoice: string;
+  phone: string;
+  email?: string;
   date: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
+  location: string;
+  status: "active" | "inactive";
 };
 
 export const columns: ColumnDef<Payment>[] = [
@@ -51,12 +52,11 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
 
-  { accessorKey: "quotation", header: "Quote Number" },
   {
     accessorKey: "customer",
     header: ({ column }) => {
       return (
-        <DataTableColumnHeader column={column} title="Customer" />
+        <DataTableColumnHeader column={column} title="Customer Name" />
       );
     },
     cell: ({row}) => {
@@ -64,25 +64,26 @@ export const columns: ColumnDef<Payment>[] = [
         return (<div className="">{customer}</div>)
     }
   },
-  { accessorKey: "invoice", header: ({column}) => {return(<DataTableColumnHeader column={column} title="Invoice Number" />)} },
+  { accessorKey: "phone", header: ({column}) => {return(<DataTableColumnHeader column={column} title="Phone Number" />)} },
   { accessorKey: "date", header: "Last Updated" },
-  {
-    accessorKey: "amount",
-    header: () => <div className="text-left">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "KES",
-      }).format(amount);
+  { accessorKey: "location", header: ({column}) => {return(<DataTableColumnHeader column={column} title="Location" />)} },
 
-      return <div className="text-left font-medium">{formatted}</div>;
-    },
-  },
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      const status = row.getValue("status") as string;
+      return (
+        <Badge 
+          variant={status === "active" ? "default" : "destructive"}
+          className="capitalize"
+        >
+          {status}
+        </Badge>
+      );
+    }
   },
+
   {
     id: "actions",
     cell: ({ row }) => {
